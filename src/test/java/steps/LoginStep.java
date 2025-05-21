@@ -1,5 +1,7 @@
 package steps;
-
+import java.time.Duration;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import Base.BaseUtil;
 import com.aventstack.extentreports.GherkinKeyword;
 
@@ -25,23 +27,24 @@ public class LoginStep extends BaseUtil{
         this.base = base;
     }
 
-    public class User {
-    public String username;
-    public String password;
-        
-        public User(String userName, String passWord) {
-            username= userName;
-            password = passWord;
-        }
+    @DataTableType(replaceWithEmptyString = "[blank]")
+public User convert(Map<String, String> entry){
+    String username = entry.get("username");
+    String password = entry.get("password");
+    if (password == null) {
+        password = "";  // or some default value
+    } else {
+        password = password.concat("$$$$$"); // If you really want to append $$$$$
     }
-
+    return new User(username, password);
+}
 
 
     @Then("^I should see the userform page$")
     public void iShouldSeeTheUserformPage() throws Throwable {
         scenarioDef.createNode(new GherkinKeyword("Then"), "I should see the userform page");
 
-        Assert.assertEquals("Its not displayed", base.Driver.findElement(By.id("Initial")).isDisplayed(), true);
+        Assert.assertEquals("Its not displayed", base.Driver.findElement(By.id("app")).isDisplayed(), true);
     }
 
     @Given("^I navigate to the login page$")
@@ -49,6 +52,11 @@ public class LoginStep extends BaseUtil{
         base.scenarioDef.createNode(new GherkinKeyword("Given"), "I navigate to the login page");
         System.out.println("Navigate Login Page");
         base.Driver.navigate().to("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");
+
+
+    // Add explicit wait for the username field
+    new WebDriverWait(base.Driver, Duration.ofSeconds(10))
+        .until(ExpectedConditions.visibilityOfElementLocated(By.name("username")));
     }
 
 
@@ -60,21 +68,13 @@ public class LoginStep extends BaseUtil{
     }
 
 
-    @And("^I enter the following for Login$")
-    public void iEnterTheFollowingForLogin(List<User> table) throws Throwable {
-        base.scenarioDef.createNode(new GherkinKeyword("And"), "I enter the following for login");
-        //Create an ArrayList
-        //List<User> users =  new ArrayList<User>();
-        //Store all the users
-        //List<User> users = table.asList(User.class);
+@And("^I enter the following for Login$")
+public void iEnterTheFollowingForLogin(List<User> table) throws Throwable {
+    base.scenarioDef.createNode(new GherkinKeyword("And"), "I enter the following for login");
+    LoginPage page = new LoginPage(base.Driver);
+    page.Login(table.get(0).username, table.get(0).password);
+}
 
-        LoginPage page = new LoginPage(base.Driver);
-
-        page.Login(table.get(0).username, table.get(0).password);
-
-        //page.Login(users.get(2), users.get(3));
-
-    }
 
     @And("^I enter ([^\"]*) and ([^\"]*)$")
     public void iEnterUsernameAndPassword(String userName, String password) throws Throwable {
@@ -90,11 +90,14 @@ public class LoginStep extends BaseUtil{
     }
 
 
-    // public class User {
-    //     public String username;
-    //     public String password;
+    public class User {
+        public String username;
+        public String password;
 
-        
-    // }
+        public User(String userName, String passWord) {
+            username= userName;
+            password = passWord;
+        }
+    }
 
 }
