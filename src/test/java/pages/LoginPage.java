@@ -9,6 +9,8 @@ import org.openqa.selenium.support.PageFactory;
 public class LoginPage {
 
     public LoginPage(WebDriver driver) {
+        this.driver = driver;
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));  // 10-second timeout
         PageFactory.initElements(driver, this);
     }
 
