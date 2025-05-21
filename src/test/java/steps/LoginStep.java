@@ -25,13 +25,11 @@ public class LoginStep extends BaseUtil{
         this.base = base;
     }
 
-    @DataTableType(replaceWithEmptyString = "[blank]")
-    public User convert(Map<String, String> entry){
-        return new User(
-                entry.get("username"),
-                entry.get("password").concat("$$$$$")
-        );
+    public class User {
+    public String username;
+    public String password;
     }
+
 
 
     @Then("^I should see the userform page$")
