@@ -45,7 +45,7 @@ public class LoginStep extends BaseUtil{
     public void iNavigateToTheLoginPage() throws Throwable {
         base.scenarioDef.createNode(new GherkinKeyword("Given"), "I navigate to the login page");
         System.out.println("Navigate Login Page");
-        base.Driver.navigate().to("https://opensource-demo.orangehrmlive.com/");
+        base.Driver.navigate().to("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");
     }
 
 
