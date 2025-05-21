@@ -6,34 +6,29 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
 
-/**
- * Created by Karthik on 21/09/2019.
- */
 public class LoginPage {
 
     public LoginPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
 
-    @FindBy(how = How.NAME, using = "UserName")
+    // Correct locators based on current OrangeHRM login page
+
+    @FindBy(how = How.NAME, using = "username")
     public WebElement txtUserName;
 
-    @FindBy(how = How.NAME, using = "Password")
+    @FindBy(how = How.NAME, using = "password")
     public WebElement txtPassword;
 
-    @FindBy(how = How.NAME, using = "Login")
+    @FindBy(how = How.CSS, using = "button[type='submit']")
     public WebElement btnLogin;
 
-    public void Login(String userName, String password)
-    {
+    public void Login(String userName, String password) {
         txtUserName.sendKeys(userName);
         txtPassword.sendKeys(password);
     }
 
-    public void ClickLogin()
-    {
-        btnLogin.submit();
+    public void ClickLogin() {
+        btnLogin.click();
     }
-
-
 }
