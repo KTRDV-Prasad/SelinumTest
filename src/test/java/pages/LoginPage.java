@@ -5,12 +5,18 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public class LoginPage {
 
+    private WebDriver driver; // Declare driver
+    private WebDriverWait wait; // Declare wait
+
     public LoginPage(WebDriver driver) {
         this.driver = driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));  // 10-second timeout
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));  // 10-second timeout
         PageFactory.initElements(driver, this);
     }
 
